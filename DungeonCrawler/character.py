@@ -35,7 +35,7 @@ class Character:
     def update(self):
 
         #Checking what action the player is performing
-        if self.running == True:
+        if self.running:
             self.update_action(1) #Running animation
         else:
             self.update_action(0) #Idle animation
@@ -62,5 +62,8 @@ class Character:
 
     def draw (self, surface):
         flipped_image = pygame.transform.flip(self.image, self.flip, False)
-        surface.blit(flipped_image, self.rect)
+        if self.char_type == 0:
+            surface.blit(flipped_image, (self.rect.x, self.rect.y - constants.SCALE * constants.OFFSET))
+        else:
+            surface.blit(flipped_image, self.rect)
         pygame.draw.rect(surface, constants.RED, self.rect, 1)

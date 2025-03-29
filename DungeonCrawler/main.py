@@ -1,15 +1,14 @@
 import pygame
-from pygame.examples.aliens import Player
-
 import constants
 from character import Character
+from weapon import Weapon
 
 pygame.init()
 
 screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT), pygame.SCALED)
 pygame.display.set_caption("Dungeon Crawler")
 
-#Crating clock for maintaining framerate
+#Crating clock for maintaining frame rate
 clock = pygame.time.Clock()
 
 #Defining player movement variables
@@ -23,6 +22,9 @@ def scale_img(image, scale):
     w = image.get_width()
     h = image.get_height()
     return pygame.transform.scale(image, (w * scale, h * scale))
+
+#Loading the weapon images
+bow_image = scale_img(pygame.image.load("assets/images/weapons/bow.png").convert_alpha(), constants.WEAPON_SCALE)
 
 #Loading character images
 mob_animations = []
@@ -48,6 +50,9 @@ for mob in mob_types:
 #Creating the player
 player = Character(100, 100, mob_animations, 0)
 
+#Creating the player's weapon
+bow = Weapon(bow_image)
+
 #Main game loop
 run = True
 while run:
@@ -61,14 +66,14 @@ while run:
     dx = 0
     dy = 0
 
-    #If the player is moving to the right the number is positive, but if its moving to the other direction, the number is negative, same with down and up commands
-    if moving_right == True:
+    #If the player is moving to the right the number is positive, but if it's moving to the other direction, the number is negative, same with down and up commands
+    if moving_right:
         dx = constants.SPEED
-    if moving_left == True:
+    if moving_left:
         dx = -constants.SPEED
-    if moving_up == True:
+    if moving_up:
         dy = -constants.SPEED
-    if moving_down == True:
+    if moving_down:
         dy = constants.SPEED
 
     #Moving the player
@@ -76,10 +81,11 @@ while run:
 
     #updating the player
     player.update()
+    bow.update(player)
 
     #Drawing player on the screen
     player.draw(screen)
-
+    bow.draw(screen)
 
     #Event handler
     for event in pygame.event.get():
