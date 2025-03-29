@@ -1,4 +1,6 @@
 import pygame
+from pygame.examples.aliens import Player
+
 import constants
 from character import Character
 
@@ -16,8 +18,22 @@ moving_right = False
 moving_up = False
 moving_down = False
 
+#Helper function to scale images
+def scale_img(image, scale):
+    w = image.get_width()
+    h = image.get_height()
+    return pygame.transform.scale(image, (w * scale, h * scale))
+
+animation_list = []
+for i in range(4):
+    #Loading the player image into the game
+    img = pygame.image.load(f"assets/images/characters/elf/idle/{i}.png").convert_alpha()
+    #Scaling the player according to the scale constant
+    img = scale_img(img, constants.SCALE)
+    animation_list.append(img)
+
 #Creating the player
-player = Character(100, 100)
+player = Character(100, 100, animation_list)
 
 #Main game loop
 run = True
@@ -44,6 +60,9 @@ while run:
 
     #Moving the player
     player.move(dx, dy)
+
+    #updating the player
+    player.update()
 
     #Drawing player on the screen
     player.draw(screen)
