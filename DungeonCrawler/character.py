@@ -3,7 +3,7 @@ import pygame
 import constants
 
 class Character:
-    def __init__(self, x, y, mob_animations, char_type):
+    def __init__(self, x, y, health, mob_animations, char_type):
         self.char_type = char_type
         self.flip = False
         self.animation_list = mob_animations[char_type]
@@ -11,6 +11,8 @@ class Character:
         self.action = 0 #0: idle animation, 1: running animation
         self.update_time = pygame.time.get_ticks()
         self.running = False
+        self.health = health
+        self.alive = True
         self.image = self.animation_list[self.action][self.frame_index]
         #coordinates x and Y and width and height of the character
         self.rect = pygame.Rect(0, 0, 40, 40)
@@ -33,6 +35,11 @@ class Character:
         self.rect.y += dy
 
     def update(self):
+
+        #Checking if the character has died
+        if self.health <= 0:
+            self.health = 0
+            self.alive = False
 
         #Checking what action the player is performing
         if self.running:
